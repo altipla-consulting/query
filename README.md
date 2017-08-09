@@ -1,2 +1,4 @@
+
 # query
-Golang SQL database queries in a fluent style
+
+Golang SQL database queries in a fluent style.

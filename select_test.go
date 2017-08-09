@@ -106,4 +106,13 @@ var _ = Describe("Select", func() {
 		Expect(sql).To(Equal("SELECT * FROM foo_table LIMIT 40, 10"))
 		Expect(values).To(Equal([]interface{}{}))
 	})
+
+	It("Should generate multiple alternative conditions", func() {
+		q := NewSelect("foo_table").Condition(LogicOr(Filter("foo =", "bar"), Filter("baz =", 3)))
+
+		sql, values, err := q.SQL()
+		Expect(err).To(Succeed())
+		Expect(sql).To(Equal("SELECT * FROM foo_table WHERE (foo = ?) OR (baz = ?)"))
+		Expect(values).To(Equal([]interface{}{"bar", 3}))
+	})
 })

@@ -2,6 +2,9 @@ package query
 
 import (
 	"fmt"
+	"strings"
+
+	"github.com/juju/errors"
 )
 
 type Condition interface {
@@ -33,4 +36,27 @@ func Between(column string, valueBefore, valueAfter interface{}) *betweenImpl {
 
 func (impl *betweenImpl) SQL() (string, []interface{}, error) {
 	return fmt.Sprintf("%s BETWEEN ? AND ?", impl.column), []interface{}{impl.valueBefore, impl.valueAfter}, nil
+}
+
+type logicOrImpl struct {
+	conditions []Condition
+}
+
+func LogicOr(conditions ...Condition) *logicOrImpl {
+	return &logicOrImpl{conditions}
+}
+
+func (impl *logicOrImpl) SQL() (string, []interface{}, error) {
+	sql := []string{}
+	values := []interface{}{}
+	for _, cond := range impl.conditions {
+		sqlCond, valuesCond, err := cond.SQL()
+		if err != nil {
+			return "", nil, errors.Trace(err)
+		}
+		sql = append(sql, fmt.Sprintf("(%s)", sqlCond))
+		values = append(values, valuesCond...)
+	}
+
+	return strings.Join(sql, " OR "), values, nil
 }

@@ -160,3 +160,7 @@ func (q *Select) Count(db *sql.DB) (int64, error) {
 
 	return n, nil
 }
+
+func (q *Select) IsOrdered() bool {
+	return len(q.orders) > 0
+}

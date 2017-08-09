@@ -134,7 +134,8 @@ func (q *Select) GetAll(db *sql.DB, models interface{}) error {
 	}
 	defer rows.Close()
 
-	elemType := modelsType.Elem()
+	sliceElemType := modelsType.Elem().Elem()
+	elemType := sliceElemType.Elem()
 	for rows.Next() {
 		elemValue := reflect.New(elemType)
 		if err := sqlx.StructScan(rows, elemValue.Interface()); err != nil {

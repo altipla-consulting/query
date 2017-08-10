@@ -1,6 +1,8 @@
 
 # query
 
+> **WARNING:** Prefer to use this complete library: https://upper.io/db.v3/
+
 [![GoDoc](https://godoc.org/github.com/altipla-consulting/query?status.svg)](https://godoc.org/github.com/altipla-consulting/query)
 
 Golang SQL database queries in a fluent style.

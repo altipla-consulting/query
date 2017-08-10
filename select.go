@@ -130,7 +130,7 @@ func (q *Select) GetAll(db *sql.DB, models interface{}) error {
 
 	rows, err := db.Query(sql, values...)
 	if err != nil {
-		return errors.Trace(err)
+		return errors.Annotate(err, sql)
 	}
 	defer rows.Close()
 
